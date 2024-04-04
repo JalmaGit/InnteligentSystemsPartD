@@ -4,14 +4,14 @@ from scipy import signal
 class Shower:
 
     def __init__(self):
-        self.last_hot_integrate = 00
-        self.last_cold_integrate = 00
+        self.last_hot_integrate = 0
+        self.last_cold_integrate = 0
         self.temp_set_point = 20
         self.flow_set_point = 0.5
 
     def hot_water_valve(self, hot, dt, t):
         #Integrator
-        integrator = np.clip((self.last_hot_integrate + (hot * dt)),0.15,2)
+        integrator = np.clip((self.last_hot_integrate + (hot * dt)),0.0015,2)
         self.last_hot_integrate = integrator
 
         #Max Flow
@@ -25,12 +25,14 @@ class Shower:
         #Temp
         temp_hot = 30
 
+        print(f"debugger: {integrator=}")
+
         return flow_rate_hot, temp_hot
 
     def cold_water_valve(self, cold, dt, t):
         #Integrator
-        integrator = np.clip((self.last_hot_integrate + (cold * dt)),0.15,2)
-        self.last_hot_integrate = integrator
+        integrator = np.clip((self.last_cold_integrate + (cold * dt)),0.0015,2)
+        self.last_cold_integrate = integrator
 
         #Max Flow
         max_flow_constant = 1
@@ -53,7 +55,7 @@ class Shower:
 
         error =  temp - temp_set_point
 
-        print(f"Debugging {temp=}, {temp_set_point=}, {error=}")
+        #print(f"Debugging {temp=}, {temp_set_point=}, {error=}")
 
         return error, temp
 

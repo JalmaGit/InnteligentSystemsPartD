@@ -1,5 +1,4 @@
 from simpful import *
-import simupy as sp
 import Shower as SH
 import time
 import matplotlib.pyplot as plt
@@ -79,8 +78,8 @@ def ploting ():
 Shower = SH.Shower()
 start_temp = 20
 start_flow = 0.5
-FS.set_variable("temp", start_temp)
-FS.set_variable("flow", start_flow)
+FS.set_variable("temp", 0)
+FS.set_variable("flow", 0)
 start_time = time.time()
 last_time = time.time()
 run_time = 0
@@ -121,6 +120,15 @@ while True:
     FS.set_variable("flow",flow_error)
 
     #print(f"Debugger: {cold=}, {hot=}, {temp_error=}, {flow_error=}")
+
+
+
+
+
+
+
+
+
 
     # Logger
     time_logg.append(run_time)
