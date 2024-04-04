@@ -106,8 +106,8 @@ while True:
         Shower.flow_set_point = start_flow
 
     # Perform Mamdani inference
-    cold = FS.Mamdani_inference(['cold'])['cold']
-    hot = FS.Mamdani_inference(['hot'])['hot']
+    cold = FS.Mamdani_inference()['cold']
+    hot = FS.Mamdani_inference()['hot']
 
     # Turn Shower Valves
     flow_cold, temp_cold = Shower.cold_water_valve(cold, dt, run_time)

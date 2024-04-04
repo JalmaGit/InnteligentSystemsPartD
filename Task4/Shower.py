@@ -11,7 +11,7 @@ class Shower:
 
     def hot_water_valve(self, hot, dt, t):
         #Integrator
-        integrator = np.clip((self.last_hot_integrate + (hot * dt)),0.1,2)
+        integrator = np.clip((self.last_hot_integrate + (hot * dt)),0.15,2)
         self.last_hot_integrate = integrator
 
         print(f"{self.last_hot_integrate=}")
@@ -31,7 +31,7 @@ class Shower:
 
     def cold_water_valve(self, cold, dt, t):
         #Integrator
-        integrator = np.clip((self.last_hot_integrate + (cold * dt)),0.1,2)
+        integrator = np.clip((self.last_hot_integrate + (cold * dt)),0.15,2)
         self.last_hot_integrate = integrator
 
         #Max Flow
@@ -49,8 +49,8 @@ class Shower:
 
     def temp_error(self, hot_water_flow, temp_hot, cold_water_flow, temp_cold, t):
         
-        temp_variation = 4 * signal.square(0.214320 * t)
-        temp_set_point_adder = self.flow_set_point + temp_variation
+        #temp_variation = 4 * signal.square(0.214320 * t)
+        temp_set_point_adder = self.flow_set_point #+ temp_variation
         temp = ((temp_hot * hot_water_flow + temp_cold * cold_water_flow)/(cold_water_flow + hot_water_flow))
 
         error =  temp - temp_set_point_adder
@@ -59,8 +59,8 @@ class Shower:
 
     def flow_error(self, hot_water_flow, cold_water_flow, t):
         
-        flow_variation = 0.2 * signal.square(0.3 * t)
-        flow_set_point_adder = self.flow_set_point + flow_variation
+        #flow_variation = 0.2 * signal.square(0.3 * t)
+        flow_set_point_adder = self.flow_set_point #+ flow_variation
         flow_rate = (hot_water_flow + cold_water_flow)
 
         error = flow_rate - flow_set_point_adder
