@@ -1,4 +1,5 @@
 from simpful import *
+import simupy as sp
 
 # Temprature Control in a Shower problem
 # Create a fuzzy system object
@@ -59,13 +60,13 @@ FS.set_variable("flow", 1)
 print(FS.Mamdani_inference(["cold"]))
 print(FS.Mamdani_inference(['hot']))
 
+def ploting ():
+    # Plot Surface Maps
+    figCold = FS.plot_surface(variables=['temp','flow'],output='cold')
+    figHot = FS.plot_surface(variables=['temp','flow'],output='hot')
 
-# Plot Surface Maps
-figCold = FS.plot_surface(variables=['temp','flow'],output='cold')
-figHot = FS.plot_surface(variables=['temp','flow'],output='hot')
-
-# Plot Linquistic Variables
-fig1 = FS.plot_variable(var_name='temp')
-fig2 = FS.plot_variable(var_name='flow')
-fig3 = FS.plot_variable(var_name='cold')
-fig4 = FS.plot_variable(var_name='hot')
+    # Plot Linquistic Variables
+    fig1 = FS.plot_variable(var_name='temp')
+    fig2 = FS.plot_variable(var_name='flow')
+    fig3 = FS.plot_variable(var_name='cold')
+    fig4 = FS.plot_variable(var_name='hot')
