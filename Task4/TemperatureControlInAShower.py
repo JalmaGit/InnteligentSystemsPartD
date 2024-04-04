@@ -140,8 +140,23 @@ while True:
 fig, ax = plt.subplots()
 ax.plot(time_logg,set_point_temp_logg, '-b', label='Step Input')
 ax.plot(time_logg,temp_logg, '-r', label='System Response')
+ax.set_xlabel("Time in seconds")
+ax.set_ylabel("Temperature")
+ax.set_title("Temperature with a step input", loc='left')
 ax.grid(True)
+
+fig1, ax1 = plt.subplots()
+ax1.plot(time_logg,set_point_flow_logg, '-b', label='Step Input')
+ax1.plot(time_logg,flow_rate_logg, '-r', label='System Response')
+ax1.set_xlabel("Time in seconds")
+ax1.set_ylabel("Flow Rate")
+ax1.set_title("Flow Rate with a step input", loc='left')
+ax1.grid(True)
 fig.show()
 plt.show()
+fig1.show()
+plt.show()
 print("Success")
+
+
     
