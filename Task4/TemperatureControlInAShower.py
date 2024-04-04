@@ -73,7 +73,6 @@ def ploting ():
     fig3 = FS.plot_variable(var_name='cold')
     fig4 = FS.plot_variable(var_name='hot')
 
-ploting()
 
 # Initilize System
 Shower = SH.Shower()
@@ -93,7 +92,7 @@ set_point_flow_logg = []
 temp_logg = []
 flow_rate_logg = []
 
-while False:
+while True:
     dt = time.time() - last_time
     last_time = time.time()
 
@@ -145,26 +144,22 @@ while False:
         break
 
 
-    # Plotter
-    fig, ax = plt.subplots()
-    ax.plot(time_logg,set_point_temp_logg, '-b', label='Step Input')
-    ax.plot(time_logg,temp_logg, '-r', label='System Response')
-    ax.set_xlabel("Time in seconds")
-    ax.set_ylabel("Temperature")
-    ax.set_title("Temperature with a step input", loc='left')
-    ax.grid(True)
-
-    fig1, ax1 = plt.subplots()
-    ax1.plot(time_logg,set_point_flow_logg, '-b', label='Step Input')
-    ax1.plot(time_logg,flow_rate_logg, '-r', label='System Response')
-    ax1.set_xlabel("Time in seconds")
-    ax1.set_ylabel("Flow Rate")
-    ax1.set_title("Flow Rate with a step input", loc='left')
-    ax1.grid(True)
-    fig.show()
-    fig1.show()
-    plt.show()
-    print("Success")
-
-
-    
+# Plotter
+fig, ax = plt.subplots()
+ax.plot(time_logg,set_point_temp_logg, '-b', label='Step Input')
+ax.plot(time_logg,temp_logg, '-r', label='System Response')
+ax.set_xlabel("Time in seconds")
+ax.set_ylabel("Temperature")
+ax.set_title("Temperature with a step input", loc='left')
+ax.grid(True)
+fig1, ax1 = plt.subplots()
+ax1.plot(time_logg,set_point_flow_logg, '-b', label='Step Input')
+ax1.plot(time_logg,flow_rate_logg, '-r', label='System Response')
+ax1.set_xlabel("Time in seconds")
+ax1.set_ylabel("Flow Rate")
+ax1.set_title("Flow Rate with a step input", loc='left')
+ax1.grid(True)
+fig.show()
+fig1.show()
+plt.show()
+print("Success")

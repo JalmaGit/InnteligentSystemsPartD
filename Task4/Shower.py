@@ -49,20 +49,20 @@ class Shower:
 
     def temp_error(self, flow_rate_hot, temp_hot, flow_rate_cold, temp_cold, t):
         
-        #temp_variation = 4 * signal.square(0.214320 * t)
-        temp_set_point = self.temp_set_point  #+ temp_variation
+        temp_variation = 0.1 * signal.square(0.214320 * t)
+        temp_set_point = self.temp_set_point  + temp_variation
         temp = (flow_rate_hot * temp_hot + flow_rate_cold * temp_cold)/(flow_rate_hot + flow_rate_cold)
 
         error =  temp - temp_set_point
 
-        #print(f"Debugging {temp=}, {temp_set_point=}, {error=}")
+        print(f"Debugging {temp=}, {temp_set_point=}, {error=}")
 
         return error, temp
 
     def flow_error(self, flow_rate_hot, flow_rate_cold, t):
         
-        #flow_variation = 0.2 * signal.square(0.3 * t)
-        flow_set_point = self.flow_set_point #+ flow_variation
+        flow_variation = 0.2 * signal.square(0.3 * t)
+        flow_set_point = self.flow_set_point + flow_variation
         flow_rate = flow_rate_hot + flow_rate_cold
 
         error = flow_rate - flow_set_point
