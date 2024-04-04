@@ -1,5 +1,8 @@
 from simpful import *
 import simupy as sp
+import Shower as SH
+import time
+import matplotlib.pyplot as plt
 
 # Temprature Control in a Shower problem
 # Create a fuzzy system object
@@ -53,12 +56,12 @@ R18 = "IF (temp IS hot) AND (flow IS hard) THEN (hot IS closeFast)"
 FS.add_rules([R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18])
 
 # Set antecedents values
-FS.set_variable("temp", 10)
-FS.set_variable("flow", 1)
+#FS.set_variable("temp", 10)
+#FS.set_variable("flow", 1)
 
 # Perform Mamdani inference and print output
-print(FS.Mamdani_inference(["cold"]))
-print(FS.Mamdani_inference(['hot']))
+#print(FS.Mamdani_inference(["cold"])['cold'])
+#print(FS.Mamdani_inference(['hot']))
 
 def ploting ():
     # Plot Surface Maps
@@ -70,3 +73,75 @@ def ploting ():
     fig2 = FS.plot_variable(var_name='flow')
     fig3 = FS.plot_variable(var_name='cold')
     fig4 = FS.plot_variable(var_name='hot')
+
+
+# Initilize System
+Shower = SH.Shower()
+start_temp = 20
+start_flow = 0.5
+FS.set_variable("temp", 0)
+FS.set_variable("flow", 0)
+start_time = time.time()
+last_time = time.time()
+run_time = 0
+dt = 0
+
+# Initilizer Logger
+time_logg = []
+set_point_temp_logg = []
+set_point_flow_logg = []
+temp_logg = []
+flow_rate_logg = []
+
+while True:
+    dt = time.time() - last_time
+    last_time = time.time()
+
+    #Step Input
+    if 3 <= run_time:
+        Shower.temp_set_point = 23
+        Shower.flow_set_point = 1
+    else:
+        Shower.temp_set_point = start_temp
+        Shower.flow_set_point = start_flow
+
+    # Perform Mamdani inference
+    cold = FS.Mamdani_inference(['cold'])['cold']
+    hot = FS.Mamdani_inference(['hot'])['hot']
+
+    # Turn Shower Valves
+    flow_cold, temp_cold = Shower.cold_water_valve(cold, dt, run_time)
+    flow_hot, temp_hot = Shower.hot_water_valve(hot, dt, run_time)
+
+    temp_error, temp = Shower.temp_error(flow_hot,temp_hot, flow_cold, temp_cold, run_time)
+    flow_error, flow_rate = Shower.flow_error(flow_hot,flow_cold, run_time)
+
+    # Set antecedents values
+    FS.set_variable("temp",temp_error)
+    FS.set_variable("flow",flow_error)
+
+    #print(f"Debugger: {cold=}, {hot=}, {temp_error=}, {flow_error=}")
+
+    # Logger
+    time_logg.append(run_time)
+    set_point_temp_logg.append(Shower.temp_set_point)
+    set_point_flow_logg.append(Shower.flow_set_point)
+    temp_logg.append(temp)
+    flow_rate_logg.append(flow_rate)
+
+
+    run_time = time.time() - start_time
+
+    if run_time > 6:
+        break
+
+
+# Plotter
+fig, ax = plt.subplots()
+ax.plot(time_logg,set_point_temp_logg, '-b', label='Step Input')
+ax.plot(time_logg,temp_logg, '-r', label='System Response')
+ax.grid(True)
+fig.show()
+plt.show()
+print("Success")
+    
