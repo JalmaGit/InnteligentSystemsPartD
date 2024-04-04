@@ -79,8 +79,8 @@ def ploting ():
 Shower = SH.Shower()
 start_temp = 20
 start_flow = 0.5
-FS.set_variable("temp", 0)
-FS.set_variable("flow", 0)
+FS.set_variable("temp", start_temp)
+FS.set_variable("flow", start_flow)
 start_time = time.time()
 last_time = time.time()
 run_time = 0
@@ -100,7 +100,7 @@ while True:
     #Step Input
     if 3 <= run_time:
         Shower.temp_set_point = 23
-        Shower.flow_set_point = 1
+        Shower.flow_set_point = 0.7
     else:
         Shower.temp_set_point = start_temp
         Shower.flow_set_point = start_flow
@@ -153,7 +153,6 @@ ax1.set_ylabel("Flow Rate")
 ax1.set_title("Flow Rate with a step input", loc='left')
 ax1.grid(True)
 fig.show()
-plt.show()
 fig1.show()
 plt.show()
 print("Success")
