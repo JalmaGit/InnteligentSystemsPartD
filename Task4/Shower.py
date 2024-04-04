@@ -17,7 +17,7 @@ class Shower:
         #Max Flow
         max_flow_constant = 1
         signal_generator = 0 * np.sin(0.3 * t)
-        max_flow = max_flow_constant + signal_generator
+        max_flow = max_flow_constant
 
         #Flow_rate
         flow_rate_hot = integrator * (integrator <= max_flow) + max_flow * (integrator > max_flow)
@@ -25,7 +25,7 @@ class Shower:
         #Temp
         temp_hot = 30
 
-        print(f"debugger: {integrator=}")
+        #print(f"debugger: {integrator=}")
 
         return flow_rate_hot, temp_hot
 
@@ -37,7 +37,7 @@ class Shower:
         #Max Flow
         max_flow_constant = 1
         signal_generator = 0 * np.sin(0.3 * t)
-        max_flow = max_flow_constant + signal_generator
+        max_flow = max_flow_constant
 
         #Flow_rate
         flow_rate_cold = integrator * (integrator <= max_flow) + max_flow * (integrator > max_flow)
@@ -50,8 +50,8 @@ class Shower:
     def temp_error(self, flow_rate_hot, temp_hot, flow_rate_cold, temp_cold, t):
         
         #temp_variation = 4 * signal.square(0.214320 * t)
-        temp_set_point = self.temp_set_point #+ temp_variation
-        temp = ((flow_rate_hot * temp_hot + flow_rate_cold * temp_cold)/(flow_rate_hot + flow_rate_cold))
+        temp_set_point = self.temp_set_point  #+ temp_variation
+        temp = (flow_rate_hot * temp_hot + flow_rate_cold * temp_cold)/(flow_rate_hot + flow_rate_cold)
 
         error =  temp - temp_set_point
 
@@ -66,5 +66,7 @@ class Shower:
         flow_rate = flow_rate_hot + flow_rate_cold
 
         error = flow_rate - flow_set_point
+
+        #print(f"Debugging {flow_rate=}, {flow_set_point=}, {error=}")
 
         return error, flow_rate

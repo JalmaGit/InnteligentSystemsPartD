@@ -35,22 +35,22 @@ FS.add_linguistic_variable("hot", LinguisticVariable([H_1, H_2, H_3, H_4, H_5], 
 
 # Define fuzzy rules
 R1 = "IF (temp IS cold) AND (flow IS soft) THEN (cold IS openSlow)"
-R2 = "IF (temp IS cold) AND (flow IS good) THEN (cold IS closeSLow)"
-R3 = "IF (temp IS cold) AND (flow IS hard) THEN (cold IS closeFast)"
-R4 = "IF (temp IS good) AND (flow IS soft) THEN (cold IS openSlow)"
-R5 = "IF (temp IS good) AND (flow IS good) THEN (cold IS steady)"
-R6 = "IF (temp IS good) AND (flow IS hard) THEN (cold IS closeSlow)"
-R7 = "IF (temp IS hot) AND (flow IS soft) THEN (cold IS openFast)"
-R8 = "IF (temp IS hot) AND (flow IS good) THEN (cold IS openSlow)"
-R9 = "IF (temp IS hot) AND (flow IS hard) THEN (cold IS closeSlow)"
-R10 = "IF (temp IS cold) AND (flow IS soft) THEN (hot IS openFast)"
-R11 = "IF (temp IS cold) AND (flow IS good) THEN (hot IS openSlow)"
-R12 = "IF (temp IS cold) AND (flow IS hard) THEN (hot IS closeSlow)"
-R13 = "IF (temp IS good) AND (flow IS soft) THEN (hot IS openSlow)"
-R14 = "IF (temp IS good) AND (flow IS good) THEN (hot IS steady)"
-R15 = "IF (temp IS good) AND (flow IS hard) THEN (hot IS closeSlow)"
-R16 = "IF (temp IS hot) AND (flow IS soft) THEN (hot IS openSlow)"
-R17 = "IF (temp IS hot) AND (flow IS good) THEN (hot IS closeSlow)"
+R2 = "IF (temp IS cold) AND (flow IS soft) THEN (hot IS openFast)"
+R3 = "IF (temp IS cold) AND (flow IS good) THEN (cold IS closeSlow)"
+R4 = "IF (temp IS cold) AND (flow IS good) THEN (hot IS openSlow)"
+R5 = "IF (temp IS cold) AND (flow IS hard) THEN (cold IS closeFast)"
+R6 = "IF (temp IS cold) AND (flow IS hard) THEN (hot IS closeSlow)"
+R7 = "IF (temp IS good) AND (flow IS soft) THEN (cold IS openSlow)"
+R8 = "IF (temp IS good) AND (flow IS soft) THEN (hot IS openSlow)"
+R9 = "IF (temp IS good) AND (flow IS good) THEN (cold IS steady)"
+R10 = "IF (temp IS good) AND (flow IS good) THEN (hot IS steady)"
+R11 = "IF (temp IS good) AND (flow IS hard) THEN (cold IS closeSlow)"
+R12 = "IF (temp IS good) AND (flow IS hard) THEN (hot IS closeSlow)"
+R13 = "IF (temp IS hot) AND (flow IS soft) THEN (cold IS openFast)"
+R14 = "IF (temp IS hot) AND (flow IS soft) THEN (hot IS openSlow)"
+R15 = "IF (temp IS hot) AND (flow IS good) THEN (cold IS openSlow)"
+R16 = "IF (temp IS hot) AND (flow IS good) THEN (hot IS closeSlow)"
+R17 = "IF (temp IS hot) AND (flow IS hard) THEN (cold IS closeSlow)"
 R18 = "IF (temp IS hot) AND (flow IS hard) THEN (hot IS closeFast)"
 FS.add_rules([R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18])
 
@@ -73,13 +73,14 @@ def ploting ():
     fig3 = FS.plot_variable(var_name='cold')
     fig4 = FS.plot_variable(var_name='hot')
 
+ploting()
 
 # Initilize System
 Shower = SH.Shower()
 start_temp = 20
 start_flow = 0.5
-FS.set_variable("temp", 0)
-FS.set_variable("flow", 0)
+FS.set_variable("temp", 20)
+FS.set_variable("flow", 0.5)
 start_time = time.time()
 last_time = time.time()
 run_time = 0
@@ -92,17 +93,26 @@ set_point_flow_logg = []
 temp_logg = []
 flow_rate_logg = []
 
-while True:
+while False:
     dt = time.time() - last_time
     last_time = time.time()
 
     #Step Input
-    if 3 <= run_time:
+    if 5 <= run_time <= 10:
         Shower.temp_set_point = 23
         Shower.flow_set_point = 0.7
-    else:
+    elif 10 <= run_time <= 15:
         Shower.temp_set_point = start_temp
         Shower.flow_set_point = start_flow
+    elif 15 <= run_time <= 20:
+        Shower.temp_set_point = 23
+        Shower.flow_set_point = 0.7
+    elif 25 <= run_time <= 30:
+        Shower.temp_set_point = start_temp
+        Shower.flow_set_point = start_flow
+    else:
+        Shower.temp_set_point = 23
+        Shower.flow_set_point = 0.7
 
     # Perform Mamdani inference
     cold = FS.Mamdani_inference()['cold']
@@ -121,15 +131,6 @@ while True:
 
     #print(f"Debugger: {cold=}, {hot=}, {temp_error=}, {flow_error=}")
 
-
-
-
-
-
-
-
-
-
     # Logger
     time_logg.append(run_time)
     set_point_temp_logg.append(Shower.temp_set_point)
@@ -140,30 +141,30 @@ while True:
 
     run_time = time.time() - start_time
 
-    if run_time > 6:
+    if run_time > 35:
         break
 
 
-# Plotter
-fig, ax = plt.subplots()
-ax.plot(time_logg,set_point_temp_logg, '-b', label='Step Input')
-ax.plot(time_logg,temp_logg, '-r', label='System Response')
-ax.set_xlabel("Time in seconds")
-ax.set_ylabel("Temperature")
-ax.set_title("Temperature with a step input", loc='left')
-ax.grid(True)
+    # Plotter
+    fig, ax = plt.subplots()
+    ax.plot(time_logg,set_point_temp_logg, '-b', label='Step Input')
+    ax.plot(time_logg,temp_logg, '-r', label='System Response')
+    ax.set_xlabel("Time in seconds")
+    ax.set_ylabel("Temperature")
+    ax.set_title("Temperature with a step input", loc='left')
+    ax.grid(True)
 
-fig1, ax1 = plt.subplots()
-ax1.plot(time_logg,set_point_flow_logg, '-b', label='Step Input')
-ax1.plot(time_logg,flow_rate_logg, '-r', label='System Response')
-ax1.set_xlabel("Time in seconds")
-ax1.set_ylabel("Flow Rate")
-ax1.set_title("Flow Rate with a step input", loc='left')
-ax1.grid(True)
-fig.show()
-fig1.show()
-plt.show()
-print("Success")
+    fig1, ax1 = plt.subplots()
+    ax1.plot(time_logg,set_point_flow_logg, '-b', label='Step Input')
+    ax1.plot(time_logg,flow_rate_logg, '-r', label='System Response')
+    ax1.set_xlabel("Time in seconds")
+    ax1.set_ylabel("Flow Rate")
+    ax1.set_title("Flow Rate with a step input", loc='left')
+    ax1.grid(True)
+    fig.show()
+    fig1.show()
+    plt.show()
+    print("Success")
 
 
     
