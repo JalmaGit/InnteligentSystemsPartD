@@ -1,5 +1,4 @@
 from simpful import *
-import matplotlib.pyplot as plt
 
 # Temprature Control in a Shower problem
 # Create a fuzzy system object
@@ -53,11 +52,13 @@ R18 = "IF (temp IS hot) AND (flow IS hard) THEN (hot IS closeFast)"
 FS.add_rules([R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18])
 
 # Set antecedents values
-#FS.set_variable("temp", 10)
-#FS.set_variable("Food", 5)
+FS.set_variable("temp", 10)
+FS.set_variable("flow", 1)
 
 # Perform Mamdani inference and print output
-#print(FS.Mamdani_inference(["Tip"]))
+print(FS.Mamdani_inference(["cold"]))
+print(FS.Mamdani_inference(['hot']))
+
 
 # Plot Surface Maps
 figCold = FS.plot_surface(variables=['temp','flow'],output='cold')
